@@ -12,6 +12,13 @@ import {
   Smile,
   Crown,
   CheckCircle,
+  BookOpen,
+  Lightbulb,
+  FileText,
+  Video,
+  Award,
+  GraduationCap,
+  MessageSquare,
 } from 'lucide-react';
 
 interface Channel {
@@ -195,14 +202,36 @@ export default function CommunityPage() {
   }, {} as Record<string, Channel[]>);
 
   return (
-    <div className="h-[calc(100vh-64px)] flex">
+    <div className="h-full flex flex-col overflow-hidden">
+      {/* Floating Header */}
+      <div className="h-14 bg-kimi/80 backdrop-blur-md border-b border-slate-700 flex items-center justify-between px-4 flex-shrink-0">
+        <div className="flex items-center space-x-3">
+          <Hash className="w-5 h-5 text-gold" />
+          <span className="font-semibold text-white">Zajednica</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex min-h-0">
       {/* Channels Sidebar */}
       <div className="w-64 bg-slate-800/50 border-r border-slate-700 flex flex-col">
-        <div className="p-4 border-b border-slate-700">
+        <div className="p-4 border-b border-slate-700 flex-shrink-0">
           <h2 className="text-lg font-semibold text-white">Zajednica</h2>
           <p className="text-slate-400 text-sm">Povežite se sa drugima</p>
         </div>
-        <div className="flex-1 overflow-y-auto p-2">
+        <div className="flex-1 overflow-y-auto p-2 min-h-0">
           {Object.entries(channelsByCategory).map(([category, categoryChannels]) => (
             <div key={category} className="mb-4">
               <h3 className="text-xs font-semibold text-slate-500 uppercase px-2 mb-2">
@@ -227,12 +256,14 @@ export default function CommunityPage() {
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 flex flex-col bg-slate-900">
-        {selectedChannel ? (
+      {/* Chat Area + Right Sidebar */}
+      <div className="flex-1 flex min-h-0">
+        {/* Chat Area */}
+        <div className="flex-1 flex flex-col bg-slate-900 min-h-0">
+          {selectedChannel ? (
           <>
             {/* Channel Header */}
-            <div className="h-16 border-b border-slate-700 flex items-center justify-between px-6">
+            <div className="h-16 border-b border-slate-700 flex items-center justify-between px-6 flex-shrink-0">
               <div>
                 <h2 className="text-lg font-semibold text-white flex items-center space-x-2">
                   <Hash className="w-5 h-5 text-slate-400" />
@@ -368,6 +399,80 @@ export default function CommunityPage() {
             </div>
           </div>
         )}
+
+        </div>
+
+        {/* Right Sidebar - Learning Panel */}
+        <div className="w-72 bg-slate-800/30 border-l border-slate-700 flex flex-col">
+          <div className="p-4 border-b border-slate-700 flex-shrink-0">
+            <h3 className="font-semibold text-white flex items-center space-x-2">
+              <BookOpen className="w-5 h-5 text-gold" />
+              <span>Učenje</span>
+            </h3>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+            {/* Daily Tip */}
+            <div className="bg-kimi-light/20 rounded-lg p-4 border border-kimi/30">
+              <div className="flex items-center space-x-2 mb-2">
+                <Lightbulb className="w-4 h-4 text-gold" />
+                <span className="text-sm font-semibold text-gold">Dnevni savet</span>
+              </div>
+              <p className="text-sm text-slate-300">
+                "Najbolji način da predvidite budućnost je da je kreirate. - Peter Drucker"
+              </p>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="bg-slate-800/50 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-white mb-3">Tvoja statistika</h4>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">XP danas:</span>
+                  <span className="text-gold font-semibold">+50</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Poruke:</span>
+                  <span className="text-white">12</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Ranking:</span>
+                  <span className="text-blue-400">#45</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Learning Resources */}
+            <div className="bg-slate-800/50 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-white mb-3">Korisni resursi</h4>
+              <div className="space-y-2">
+                <a href="/courses" className="flex items-center space-x-2 text-sm text-slate-300 hover:text-gold transition-colors">
+                  <GraduationCap className="w-4 h-4" />
+                  <span>Browse kursevi</span>
+                </a>
+                <a href="/courses" className="flex items-center space-x-2 text-sm text-slate-300 hover:text-gold transition-colors">
+                  <FileText className="w-4 h-4" />
+                  <span>Vodiči za biznis</span>
+                </a>
+                <a href="/courses" className="flex items-center space-x-2 text-sm text-slate-300 hover:text-gold transition-colors">
+                  <Video className="w-4 h-4" />
+                  <span>Video tutorijali</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Achievements Preview */}
+            <div className="bg-slate-800/50 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-white mb-3">Nedavna dostignuća</h4>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Award className="w-5 h-5 text-gold" />
+                  <span className="text-sm text-slate-300">Dobrodošao</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   );
