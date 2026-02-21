@@ -100,17 +100,23 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-blue-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-kimi-light/20 via-transparent to-blue-500/10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 mb-8">
-              <Crown className="w-4 h-4 text-yellow-500" />
-              <span className="text-yellow-400 text-sm font-medium">
+            {/* Hero Logo */}
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-kimi-light via-kimi to-kimi-dark shadow-gold-lg border border-gold/30">
+                <span className="text-4xl font-black text-white tracking-wider">BI</span>
+              </div>
+            </div>
+            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-kimi-light/20 border border-kimi/30 mb-4">
+              <Crown className="w-4 h-4 text-gold" />
+              <span className="text-gold text-sm font-medium">
                 Buducnost preduzetništva na Balkanu
               </span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Institut <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Biznisa</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark">Institut</span> Biznisa
             </h1>
             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
               Edukacija, zajednica i inkubacija na jednom mestu. 
@@ -144,7 +150,7 @@ export default function HomePage() {
                 { value: '24/7', label: 'Podrška' },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-500">{stat.value}</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-gold">{stat.value}</div>
                   <div className="text-slate-400 mt-1">{stat.label}</div>
                 </div>
               ))}
@@ -303,15 +309,15 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-slate-800">
+      <footer className="py-12 border-t border-kimi-light/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
-                <Crown className="w-5 h-5 text-slate-900" />
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-kimi-light to-kimi flex items-center justify-center">
+                <span className="text-sm font-bold text-white">BI</span>
               </div>
-              <span className="text-lg font-bold text-white">Institut</span>
-              <span className="text-lg font-bold text-yellow-500">Biznisa</span>
+              <span className="text-lg font-bold text-gold">Institut</span>
+              <span className="text-lg font-bold text-white">Biznisa</span>
             </div>
             <div className="text-slate-400 text-sm">
               © 2024 Institut Biznisa. Sva prava zadržana.

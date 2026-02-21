@@ -8,17 +8,27 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        kimi: {
+          DEFAULT: '#262760',
+          light: '#3d3d8a',
+          dark: '#1a1a40',
+        },
+        gold: {
+          DEFAULT: '#eea65e',
+          light: '#f5c78a',
+          dark: '#d48a3e',
+        },
         navy: {
           DEFAULT: '#0F172A',
           light: '#1E293B',
         },
-        gold: {
-          DEFAULT: '#D4AF37',
-          light: '#F0D878',
-        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'gold': '0 0 20px rgba(238, 166, 94, 0.3)',
+        'gold-lg': '0 0 30px rgba(238, 166, 94, 0.4)',
       },
       animation: {
         'pulse-gold': 'pulse-gold 2s infinite',

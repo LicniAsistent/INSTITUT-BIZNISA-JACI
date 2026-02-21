@@ -4,10 +4,12 @@
 
 :root {
   --navy: #0F172A;
-  --gold: #D4AF37;
+  --kimi: #262760;
+  --gold: #eea65e;
   --blue: #2563EB;
   --navy-light: #1E293B;
-  --gold-light: #F0D878;
+  --gold-light: #f5c78a;
+  --gold-dark: #d48a3e;
 }
 
 * {
@@ -64,10 +66,10 @@ a {
 /* Animations */
 @keyframes pulse-gold {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 0 0 rgba(238, 166, 94, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+    box-shadow: 0 0 0 10px rgba(238, 166, 94, 0);
   }
 }
 
@@ -101,9 +103,9 @@ a {
 
 /* Glass effect */
 .glass {
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(38, 39, 96, 0.9);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(238, 166, 94, 0.3);
 }
 
 /* Button styles */

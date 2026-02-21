@@ -208,8 +208,8 @@ export default function ProfilePage() {
                   className="w-24 h-24 rounded-full border-4 border-yellow-500"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center text-slate-900 text-3xl font-bold border-4 border-yellow-500">
-                  {(profile.nickname?.[0] || profile.email[0]).toUpperCase()}
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-kimi-light to-kimi flex items-center justify-center text-white text-3xl font-bold border-4 border-gold">
+                  {(profile.nickname?.[0] || profile.email?.[0] || '?').toUpperCase()}
                 </div>
               )}
               <button className="absolute bottom-0 right-0 p-2 bg-slate-700 rounded-full text-slate-300 hover:text-white">
@@ -380,7 +380,7 @@ export default function ProfilePage() {
               </div>
               <div>
                 <p className="text-slate-400 text-sm">XP Poeni</p>
-                <p className="text-2xl font-bold text-white">{profile.xp.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-white">{(profile.xp || 0).toLocaleString()}</p>
               </div>
             </div>
             <div className="space-y-2">
@@ -390,12 +390,12 @@ export default function ProfilePage() {
               </div>
               <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 transition-all"
+                  className="h-full bg-gradient-to-r from-gold to-gold-light transition-all"
                   style={{ width: `${xpProgress}%` }}
                 />
               </div>
               <p className="text-xs text-slate-500">
-                {profile.xp.toLocaleString()} / {nextRankXp.toLocaleString()} XP
+                {(profile.xp || 0).toLocaleString()} / {(nextRankXp || 0).toLocaleString()} XP
               </p>
             </div>
           </div>
@@ -437,11 +437,11 @@ export default function ProfilePage() {
               </div>
               <div>
                 <p className="text-slate-400 text-sm">Kursevi</p>
-                <p className="text-2xl font-bold text-white">{profile.enrollments.length}</p>
+                <p className="text-2xl font-bold text-white">{(profile.enrollments || []).length}</p>
               </div>
             </div>
             <p className="text-slate-400 text-sm">
-              {profile.enrollments.filter(e => e.completed).length} završenih
+              {(profile.enrollments || []).filter(e => e.completed).length} završenih
             </p>
           </div>
         </div>
@@ -449,7 +449,7 @@ export default function ProfilePage() {
         {/* My Courses */}
         <div className="card mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Moji kursevi</h2>
-          {profile.enrollments.length > 0 ? (
+          {(profile.enrollments || []).length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {profile.enrollments.map((enrollment) => (
                 <div
@@ -503,7 +503,7 @@ export default function ProfilePage() {
         {/* Achievements */}
         <div className="card">
           <h2 className="text-xl font-semibold text-white mb-4">Dostignuća</h2>
-          {profile.achievements.length > 0 ? (
+          {(profile.achievements || []).length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {profile.achievements.map((item, index) => (
                 <div

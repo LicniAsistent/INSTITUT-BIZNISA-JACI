@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navigation />
-          <main className="min-h-screen bg-slate-900">
+          <main className="min-h-screen bg-kimi">
             {children}
           </main>
         </Providers>
