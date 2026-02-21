@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String?
+  nickname          String?   @unique
+  firstName         String?
+  lastName          String?
+  bio               String?   @db.VarChar(160)
+  avatar            String?
+  rank              Int       @default(1)
+  xp                Int       @default(0)
+  dailyXp           Int       @default(0)
+  dailyXpDate       DateTime  @default(now())
+  subscriptionStatus String   @default("none")
+  subscriptionEnd   DateTime?
+  verified          Boolean   @default(false)
+  verificationVideo String?
+  verificationStatus String   @default("none")
+  role              String    @default("user")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastActive        DateTime  @default(now())
+  
+  enrollments       Enrollment[]
+  messages          Message[]
+  achievements      UserAchievement[]
+  payments          Payment[]
+  teamMemberships   TeamMember[]
+  
+  @@map("users")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  priceRsd    Int
+  priceEur    Int
+  image       String?
+  videoUrl    String?
+  pdfUrl      String?
+  category    String
+  level       String   @default("beginner")
+  duration    String?
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  lessons     Lesson[]
+  enrollments Enrollment[]
+  
+  @@map("courses")
+}
+
+model Lesson {
+  id          String   @id @default(uuid())
+  courseId    String
+  title       String
+  description String?
+  videoUrl    String?
+  pdfUrl      String?
+  order       Int
+  duration    String?
+  createdAt   DateTime @default(now())
+  
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress    Progress[]
+  
+  @@map("lessons")
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  progress  Int      @default(0)
+  completed Boolean  @default(false)
+  certificateUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model Progress {
+  id        String   @id @default(uuid())
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, lessonId])
+  @@map("progress")
+}
+
+model Channel {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  type        String   @default("public")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  messages    Message[]
+  
+  @@map("channels")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  channelId String
+  userId    String
+  content   String   @db.Text
+  imageUrl  String?
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  channel   Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("messages")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  icon        String
+  xpReward    Int
+  requirement String
+  createdAt   DateTime @default(now())
+  
+  users       UserAchievement[]
+  
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(uuid())
+  userId        String
+  achievementId String
+  createdAt     DateTime @default(now())
+  
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement  @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  userId        String
+  type          String
+  amount        Int
+  currency      String
+  status        String   @default("pending")
+  stripeId      String?
+  description   String?
+  createdAt     DateTime @default(now())
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("payments")
+}
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  challengeId String?
+  createdAt   DateTime @default(now())
+  
+  members     TeamMember[]
+  
+  @@map("teams")
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+  teamId String
+  userId String
+  role   String @default("member")
+  
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+model Challenge {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  prize       String?
+  xpReward    Int
+  startDate   DateTime
+  endDate     DateTime
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  @@map("challenges")
+}
+
+model XpLog {
+  id        String   @id @default(uuid())
+  userId    String
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+  
+  @@map("xp_logs")
+}
+
+model SiteConfig {
+  id              String   @id @default(uuid())
+  key             String   @unique
+  value           String   @db.Text
+  updatedAt       DateTime @updatedAt
+  
+  @@map("site_config")
+}
