@@ -157,7 +157,9 @@ export default function CommunityPage() {
 
   // Context menu handlers
   const handleSendMessage = async (userId: string) => {
-    alert('Direktna poruka - uskoro! Možete koristiti community chat.');
+    // For now, navigate to community to start a conversation
+    // In future, this could open a direct message
+    router.push('/community');
   };
 
   const handlePraise = async (userId: string) => {
