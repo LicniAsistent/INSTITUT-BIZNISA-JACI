@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/Providers';
 import { Navigation } from '@/components/Navigation';
+import { SmoothScroll } from '@/components/SmoothScroll';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="sr">
       <body className={inter.className}>
         <Providers>
+          <SmoothScroll />
           <Navigation />
           <main className="min-h-screen bg-kimi">
             {children}
