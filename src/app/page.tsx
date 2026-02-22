@@ -186,7 +186,7 @@ export default function HomePage() {
       </section>
 
       {/* Rank System Section */}
-      <section className="py-20">
+      <section className="py-20 bg-gradient-to-br from-kimi/30 via-kimi-light/20 to-blue-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
@@ -213,7 +213,7 @@ export default function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-slate-800/30">
+      <section className="py-20 bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
@@ -264,7 +264,7 @@ export default function HomePage() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20">
+      <section className="py-20 bg-slate-800/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
