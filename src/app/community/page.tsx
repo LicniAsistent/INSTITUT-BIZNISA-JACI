@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { MessageContextMenu } from '@/components/MessageContextMenu';
 import {
   Send,
   Hash,
@@ -154,6 +155,59 @@ export default function CommunityPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Context menu handlers
+  const handleSendMessage = async (userId: string) => {
+    alert('Direktna poruka - uskoro! Možete koristiti community chat.');
+  };
+
+  const handlePraise = async (userId: string) => {
+    try {
+      const response = await fetch('/api/users/praise', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, type: 'praise' }),
+      });
+      const data = await response.json();
+      alert(data.message || 'Korisnik je pohvaljen!');
+    } catch (error) {
+      console.error('Error praising user:', error);
+      alert('Greška pri pohvali');
+    }
+  };
+
+  const handleAdvice = async (userId: string) => {
+    try {
+      const response = await fetch('/api/users/praise', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, type: 'advice' }),
+      });
+      const data = await response.json();
+      alert(data.message || 'Hvala na savetu!');
+    } catch (error) {
+      console.error('Error giving advice:', error);
+      alert('Greška pri davanju saveta');
+    }
+  };
+
+  const handleReport = async (userId: string) => {
+    const reason = prompt('Unesite razlog prijave:');
+    if (!reason) return;
+    
+    try {
+      const response = await fetch('/api/users/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, reason }),
+      });
+      const data = await response.json();
+      alert(data.message || 'Prijave prosleđene administratorima');
+    } catch (error) {
+      console.error('Error reporting user:', error);
+      alert('Greška pri prijavi');
+    }
+  };
+
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString('sr-RS', { hour: '2-digit', minute: '2-digit' });
@@ -289,8 +343,16 @@ export default function CommunityPage() {
                   </div>
                   <div className="space-y-4">
                     {dateMessages.map((message) => (
-                      <div
+                      <MessageContextMenu
                         key={message.id}
+                        userId={message.user.id}
+                        userNickname={message.user.nickname || 'Korisnik'}
+                        onSendMessage={handleSendMessage}
+                        onPraise={handlePraise}
+                        onAdvice={handleAdvice}
+                        onReport={handleReport}
+                      >
+                      <div
                         className={`flex space-x-4 ${
                           message.user.id === session?.user?.id ? 'flex-row-reverse space-x-reverse' : ''
                         }`}
@@ -352,6 +414,7 @@ export default function CommunityPage() {
                           </div>
                         </div>
                       </div>
+                      </MessageContextMenu>
                     ))}
                   </div>
                 </div>
