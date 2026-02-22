@@ -25,7 +25,18 @@ model User {
   verified          Boolean   @default(false)
   verificationVideo String?
   verificationStatus String   @default("none")
+  
+  // Role system - hierarchy: founder > visionLead > executiveBoard > admin > edukator > professor > moderator > supportLead > supportAgent > user
   role              String    @default("user")
+  roleLevel         Int       @default(0) // 10=founder, 9=visionLead, 8=execBoard, 7=admin, 6=edukator, 5=professor, 4=moderator, 3=supportLead, 2=supportAgent, 1=user
+  
+  // Permissions
+  canManageChannels Boolean  @default(false)
+  canManageUsers   Boolean  @default(false)
+  canManageCourses Boolean  @default(false)
+  canAccessAllChannels Boolean @default(false)
+  canCreateChannel Boolean  @default(false)
+  
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   lastActive        DateTime  @default(now())
@@ -35,6 +46,7 @@ model User {
   achievements      UserAchievement[]
   payments          Payment[]
   teamMemberships   TeamMember[]
+  ownedChannels     Channel[]
   
   @@map("users")
 }
@@ -116,7 +128,16 @@ model Channel {
   category    String
   type        String   @default("public")
   order       Int      @default(0)
-  createdAt   DateTime @default(now())
+  
+  // Channel ownership (for professors)
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  
+  // Access control
+  requiredRoleLevel Int  @default(0)
+  isPrivate         Boolean @default(false)
+  
+  createdAt   DateTime  @default(now())
   
   messages    Message[]
   

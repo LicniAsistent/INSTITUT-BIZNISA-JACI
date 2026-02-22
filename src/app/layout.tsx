@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navigation />
-          <main className="h-screen bg-kimi overflow-hidden">
+          <main className="min-h-screen bg-kimi">
             {children}
           </main>
         </Providers>

@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Footer } from '@/components/Footer';
 import {
   GraduationCap,
   Users,
@@ -97,7 +98,7 @@ export default function HomePage() {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-y-auto">
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-kimi-light/20 via-transparent to-blue-500/10" />
@@ -309,25 +310,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-kimi-light/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-kimi-light to-kimi flex items-center justify-center">
-                <span className="text-sm font-bold text-white">BI</span>
-              </div>
-              <span className="text-lg font-bold text-gold">Institut</span>
-              <span className="text-lg font-bold text-white">Biznisa</span>
-            </div>
-            <div className="text-slate-400 text-sm">
-              © 2024 Institut Biznisa. Sva prava zadržana.
-            </div>
-            <div className="flex items-center space-x-4 mt-4 md:mt-0">
-              <span className="text-slate-400 text-sm">Osnovao: Petar Jurković</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

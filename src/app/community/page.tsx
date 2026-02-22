@@ -202,7 +202,7 @@ export default function CommunityPage() {
   }, {} as Record<string, Channel[]>);
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden">
       {/* Floating Header */}
       <div className="h-14 bg-kimi/80 backdrop-blur-md border-b border-slate-700 flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center space-x-3">
