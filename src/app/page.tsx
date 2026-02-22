@@ -290,6 +290,64 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Social Proof Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-900/30 via-kimi/20 to-purple-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+              Zašto izabrati nas?
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Pridružite se zajednici koja već ostvaruje rezultate
+            </p>
+          </div>
+          
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            {[
+              { value: '2,500+', label: 'Aktivnih članova' },
+              { value: '50+', label: 'Kurseva' },
+              { value: '100+', label: 'Uspešnih biznisa' },
+              { value: '4.9/5', label: 'Ocena' },
+            ].map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-4xl lg:text-5xl font-bold text-gold mb-2">{stat.value}</div>
+                <div className="text-slate-400">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Testimonials */}
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: 'Marko P.', role: 'Preduzetnik', text: 'Zajednica mi je pomogla da pokrenem svoj prvi biznis. Preporučujem svima!' },
+              { name: 'Jana M.', role: 'Student', text: 'Najbolja investicija u svoje znanje. Kursovi su fantastični.' },
+              { name: 'Stefan K.', role: 'Founder', text: 'Povezivanje sa drugim preduzetnicima je neprocenjivo. Hvala Institut!' },
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <div className="flex items-center space-x-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg key={star} className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-slate-300 mb-4">"{testimonial.text}"</p>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
+                    <span className="text-white font-bold">{testimonial.name[0]}</span>
+                  </div>
+                  <div>
+                    <div className="text-white font-semibold">{testimonial.name}</div>
+                    <div className="text-slate-500 text-sm">{testimonial.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-yellow-500/10 to-blue-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -299,13 +357,33 @@ export default function HomePage() {
           <p className="text-xl text-slate-300 mb-8">
             Pridružite se hiljadama preduzetnika koji već grade svoju buducnost
           </p>
-          <Link
-            href={session ? '/courses' : '/auth/register'}
-            className="btn-primary inline-flex items-center space-x-2 text-lg"
-          >
-            <span>{session ? 'Istraži kurseve' : 'Registruj se besplatno'}</span>
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          
+          {/* CTA Form */}
+          <form className="max-w-md mx-auto space-y-4" onSubmit={(e) => {
+            e.preventDefault();
+            const email = (e.target as HTMLFormElement).email.value;
+            if (email) {
+              window.location.href = '/auth/register?email=' + encodeURIComponent(email);
+            }
+          }}>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <input 
+                name="email"
+                type="email" 
+                placeholder="Unesi svoj email" 
+                required
+                className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+              />
+              <button 
+                type="submit"
+                className="px-8 py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-navy font-semibold rounded-lg hover:from-yellow-500 hover:to-yellow-400 transition-all flex items-center justify-center space-x-2"
+              >
+                <span>Pridruži se</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-slate-500 text-sm">Besplatno se registruj i istraži platformu</p>
+          </form>
         </div>
       </section>
 
