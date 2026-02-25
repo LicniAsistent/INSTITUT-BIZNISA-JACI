@@ -17,37 +17,21 @@ import {
   Upload,
   Lock,
   Unlock,
+  AlertTriangle,
+  Clock3,
 } from 'lucide-react';
-
-const rankNames: Record<number, string> = {
-  1: 'Polaznik',
-  2: 'Aktivni učenik',
-  3: 'Pripravnik',
-  4: 'Kandidat za biznis',
-  5: 'Preduzetnik',
-  6: 'Izvršni direktor',
-  7: 'Vizionar',
-};
-
-const rankColors: Record<number, string> = {
-  1: 'text-gray-400',
-  2: 'text-gray-300',
-  3: 'text-blue-400',
-  4: 'text-green-400',
-  5: 'text-yellow-400',
-  6: 'text-orange-400',
-  7: 'text-yellow-300',
-};
-
-const rankProgress: Record<number, number> = {
-  1: 100,
-  2: 500,
-  3: 1500,
-  4: 5000,
-  5: 15000,
-  6: 50000,
-  7: 100000,
-};
+import { 
+  RANK_BENEFITS, 
+  RANK_XP_THRESHOLDS,
+  getRankFromXP, 
+  getRankProgress, 
+  canAccelerate,
+  DAILY_XP_LIMIT,
+  SUBSCRIPTION_DAYS,
+  RANK_NAMES,
+  RANK_COLORS
+} from '@/lib/roles';
+import RankBenefitsModal from '@/components/RankBenefitsModal';
 
 interface UserProfile {
   id: string;
@@ -100,6 +84,7 @@ export default function ProfilePage() {
   });
   const [verificationVideo, setVerificationVideo] = useState('');
   const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [showRankBenefits, setShowRankBenefits] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -165,13 +150,21 @@ export default function ProfilePage() {
     }
   };
 
-  const getNextRankXp = (currentRank: number) => {
-    return rankProgress[currentRank + 1] || rankProgress[currentRank];
-  };
+  // Use new XP system from roles.ts
+  const rankProgressData = profile ? getRankProgress(profile.xp || 0) : null;
+  const currentRankBenefits = profile ? (RANK_BENEFITS[profile.rank] || RANK_BENEFITS[1]) : RANK_BENEFITS[1];
+  const nextRankBenefits = profile ? (RANK_BENEFITS[profile.rank + 1] || null) : null;
+  const canAccelerateNow = profile ? canAccelerate(profile.xp || 0) : false;
 
-  const getCurrentRankXp = (currentRank: number) => {
-    return rankProgress[currentRank] || 0;
-  };
+  // Subscription deadline calculation
+  const subscriptionExpires = profile?.subscriptionEnd 
+    ? new Date(profile.subscriptionEnd)
+    : null;
+  const daysUntilExpiry = subscriptionExpires 
+    ? Math.ceil((subscriptionExpires.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null;
+  const isExpired = daysUntilExpiry !== null && daysUntilExpiry <= 0;
+  const isWarning = daysUntilExpiry !== null && daysUntilExpiry <= 10 && daysUntilExpiry > 0;
 
   if (loading) {
     return (
@@ -188,10 +181,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-
-  const currentRankXp = getCurrentRankXp(profile.rank);
-  const nextRankXp = getNextRankXp(profile.rank);
-  const xpProgress = Math.min(100, ((profile.xp - currentRankXp) / (nextRankXp - currentRankXp)) * 100);
 
   return (
     <div className="min-h-screen py-12">
@@ -223,8 +212,8 @@ export default function ProfilePage() {
                 <h1 className="text-2xl font-bold text-white">
                   {profile.nickname || profile.email}
                 </h1>
-                {profile.verified && (
-                  <CheckCircle className="w-6 h-6 text-blue-500" title="Verifikovan nalog" />
+                {profile?.verified && (
+                  <CheckCircle className="w-6 h-6 text-blue-500" />
                 )}
                 <button
                   onClick={() => setEditing(!editing)}
@@ -237,9 +226,9 @@ export default function ProfilePage() {
                 {profile.firstName} {profile.lastName}
               </p>
               <div className="flex items-center space-x-4 mt-2">
-                <span className={`font-semibold ${rankColors[profile.rank]}`}>
+                <span className={`font-semibold ${RANK_COLORS[profile.rank]}`}>
                   <Crown className="w-4 h-4 inline mr-1" />
-                  {rankNames[profile.rank]}
+                  {RANK_NAMES[profile.rank]}
                 </span>
                 <span className="text-slate-400">•</span>
                 <span className="text-slate-400">
@@ -374,29 +363,53 @@ export default function ProfilePage() {
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* XP & Rank */}
           <div className="card">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-yellow-500" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-yellow-500" />
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">XP Poeni</p>
+                  <p className="text-2xl font-bold text-white">{(profile.xp || 0).toLocaleString()}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-slate-400 text-sm">XP Poeni</p>
-                <p className="text-2xl font-bold text-white">{(profile.xp || 0).toLocaleString()}</p>
-              </div>
+              <button 
+                onClick={() => setShowRankBenefits(true)}
+                className="text-xs text-blue-400 hover:underline"
+              >
+                Šta otključava?
+              </button>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Napredak ka {rankNames[profile.rank + 1] || 'Maksimum'}</span>
-                <span className="text-yellow-500">{Math.round(xpProgress)}%</span>
+                <span className="text-slate-400">
+                  Napredak ka {nextRankBenefits ? nextRankBenefits.name : 'Maksimum'}
+                  {canAccelerateNow && (
+                    <span className="ml-2 text-yellow-400">(Ubrzanje!)</span>
+                  )}
+                </span>
+                <span className="text-yellow-500">{rankProgressData ? Math.round(rankProgressData.progress) : 0}%</span>
               </div>
               <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-gold to-gold-light transition-all"
-                  style={{ width: `${xpProgress}%` }}
+                  className={`h-full bg-gradient-to-r ${currentRankBenefits?.colorClass || 'from-yellow-400 to-orange-500'} transition-all`}
+                  style={{ width: `${rankProgressData?.progress || 0}%` }}
                 />
               </div>
-              <p className="text-xs text-slate-500">
-                {(profile.xp || 0).toLocaleString()} / {(nextRankXp || 0).toLocaleString()} XP
-              </p>
+              <div className="flex justify-between text-xs text-slate-500">
+                <span>{(RANK_XP_THRESHOLDS as any)[profile.rank]?.min?.toLocaleString() || '0'} XP</span>
+                <span>
+                  {nextRankBenefits && rankProgressData
+                    ? `${rankProgressData.xpToNext.toLocaleString()} do sledećeg`
+                    : 'Maksimum dostignut!'
+                  }
+                </span>
+              </div>
+              {/* Daily XP limit */}
+              <div className="flex items-center gap-2 text-xs text-slate-500 pt-2 border-t border-slate-700">
+                <Clock3 className="w-3 h-3" />
+                <span>Dnevni limit: <span className="text-yellow-400">{DAILY_XP_LIMIT} XP</span></span>
+              </div>
             </div>
           </div>
 
@@ -524,6 +537,14 @@ export default function ProfilePage() {
             </p>
           )}
         </div>
+
+        {/* Rank Benefits Modal */}
+        <RankBenefitsModal
+          isOpen={showRankBenefits}
+          onClose={() => setShowRankBenefits(false)}
+          currentXP={profile.xp || 0}
+          currentRank={profile.rank}
+        />
       </div>
     </div>
   );
